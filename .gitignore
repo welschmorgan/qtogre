@@ -25,4 +25,4 @@ BaseEditor.pro.user
 
 # Resources
 resources/*
-resources/*.*
+resources/*/*

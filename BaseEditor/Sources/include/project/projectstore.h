@@ -21,9 +21,9 @@ public:
     virtual ~ProjectStore();
 
     ProjectItem             *createItem(IProjectItemConfig *type,
-                                        const std::string &name);
+                                        const QString &name);
     ProjectItem             *getRootItem();
-    ProjectItem             *createRoot(const std::string &name);
+    ProjectItem             *createRoot(const QString &name);
 
     ProjectItem             *getRoot();
     const ProjectItem       *getRoot() const ;

@@ -1,4 +1,5 @@
-#include "include/projectwidget.h"
+#include "include/project/projectwidget.h"
+#include "include/wizards/newitemwizard.h"
 #include "include/application.h"
 #include "ui_mainwindow.h"
 #include <qmessagebox.h>
@@ -30,14 +31,14 @@ ProjectWidget::~ProjectWidget()
  * @param name The name for the project
  * @return true if successful
  */
-bool        ProjectWidget::createProject(const std::string &name)
+bool        ProjectWidget::createProject(const QString &name)
 {
     mName = name;
-    if (mName.empty())
-        mName = QInputDialog::getText(this, tr("Create project"), tr("Project name:")).toStdString();
-    if (mName.empty())
+    if (mName.isEmpty())
+        mName = QInputDialog::getText(this, tr("Create project"), tr("Project name:"));
+    if (mName.isEmpty())
         return (false);
-    mPath.clear();
+    mPath = PROJECT_BASE_PATH;
     mStore->_setModified(true);
     mStore->createRoot(mName);
     mCreated = true;
@@ -54,8 +55,9 @@ bool        ProjectWidget::openProject()
     QString path = QFileDialog::getOpenFileName(this, "Open Project", PROJECT_BASE_PATH, PROJECT_FILTERS);
     if (!path.isEmpty())
     {
-        if (_load(path.toStdString()))
+        if (_load(path))
         {
+            mPath = path;
             mStore->_setModified(false);
             enableToolbox();
             return (true);
@@ -73,9 +75,11 @@ bool        ProjectWidget::saveProjectAs()
     QString path = QFileDialog::getSaveFileName(this, tr("Save Project As ..."), PROJECT_BASE_PATH, PROJECT_FILTERS);
     if (path.isEmpty())
         return (false);
-    if (_save(path.toStdString()))
+    if (_save(path))
     {
-        mPath = path.toStdString();
+        mPath = path;
+        mStore->_setModified(false);
+        enableToolbox();
         return (true);
     }
     return (false);
@@ -88,13 +92,13 @@ bool        ProjectWidget::saveProjectAs()
 bool        ProjectWidget::saveProject()
 {
     QString path;
-    if (mPath.empty())
+    if (mPath.isEmpty())
         path = QFileDialog::getSaveFileName(this, tr("Save Project"), PROJECT_BASE_PATH, PROJECT_FILTERS);
     if (path.isEmpty())
         return (false);
-    if (_save(path.toStdString()))
+    if (_save(path))
     {
-        mPath = path.toStdString();
+        mPath = path;
         mStore->_setModified(false);
         enableToolbox();
         return (true);
@@ -136,12 +140,25 @@ bool        ProjectWidget::closeProject()
  * @brief ProjectWidget::getName
  * @return
  */
-const std::string       &ProjectWidget::getName(){ return (mName); }
+const QString           &ProjectWidget::getName() const{ return (getTag()); }
+
+/**
+ * @brief ProjectWidget::getName
+ * @param name the new name of the project
+ */
+void                    ProjectWidget::setName(const QString &name){ return (setTag(name)); }
+
+/**
+ * @brief ProjectWidget::setPath
+ * @param path the new path of the project
+ */
+void                    ProjectWidget::setPath(const QString &path){ mPath = path; }
+
 /**
  * @brief ProjectWidget::getPath
  * @return
  */
-const std::string       &ProjectWidget::getPath(){ return (mName); }
+const QString           &ProjectWidget::getPath() const{ return (mPath); }
 
 /**
  * @brief ProjectWidget::getStore
@@ -167,7 +184,7 @@ bool                    ProjectWidget::isCreated() const{ return (mCreated); }
  * @param path The path to the project file
  * @return true if success
  */
-bool        ProjectWidget::_save(const std::string &path)
+bool        ProjectWidget::_save(const QString &path)
 {
     if (closeProject())
     {
@@ -178,12 +195,13 @@ bool        ProjectWidget::_save(const std::string &path)
     return (false);
 }
 
+
 /**
  * @brief ProjectWidget::_load
  * @param path The path to the project file
  * @return true if success
  */
-bool        ProjectWidget::_load(const std::string &path)
+bool        ProjectWidget::_load(const QString &path)
 {
     if (closeProject())
     {
@@ -207,6 +225,11 @@ void        ProjectWidget::enableToolbox()
 
 void        ProjectWidget::onNewItem()
 {
+    NewItemWizard wiz(mTag, mPath, this);
+    if (wiz.exec() == NewItemWizard::Accepted)
+    {
+
+    }
 }
 
 void        ProjectWidget::onAddItem()
@@ -222,8 +245,12 @@ void        ProjectWidget::createWidget(Application * app)
     mApp = app;
     mStore = new ProjectStore(this);
     QMenu *menu = new QMenu(mApp->ui->btnAddProjectItem);
-    menu->addAction(QIcon(":/icons/new.svg"), tr("New item"), this, SLOT(onNewItem));
-    menu->addAction(QIcon(":/icons/open.svg"), tr("New item"), this, SLOT(onAddItem));
+    QAction *actNew = menu->addAction(QIcon(":/icons/new.svg"), tr("Add New Item"));
+    QAction *actAdd = menu->addAction(QIcon(":/icons/open.svg"), tr("Add Existing Item"));
+    connect(actNew, SIGNAL(triggered(bool)), this, SLOT(onNewItem()));
+    connect(actAdd, SIGNAL(triggered(bool)), this, SLOT(onAddItem()));
+    actNew->setShortcut(QKeySequence("Ctrl + Shift + N"));
+    actAdd->setShortcut(QKeySequence("Ctrl + Shift + O"));
     mApp->ui->btnAddProjectItem->setMenu(menu);
     enableToolbox();
 }

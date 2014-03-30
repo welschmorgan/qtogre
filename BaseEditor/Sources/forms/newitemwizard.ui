@@ -1,19 +1,152 @@
-<?xml version='1.0'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>NewItemWizard</class>
- <widget name="NewItemWizard" class="QWizard">
+ <widget class="QWizard" name="NewItemWizard">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>399</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Wizard</string>
   </property>
-  <widget name="wizardPage1" class="QWizardPage"/>
-  <widget name="wizardPage2" class="QWizardPage"/>
+  <widget class="QWizardPage" name="page1">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>General</string>
+   </property>
+   <property name="subTitle">
+    <string>General configuration for the item</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">0</string>
+   </attribute>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="nameLabel">
+	<property name="text">
+	 <string>Name</string>
+	</property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="nameLineEdit">
+	<property name="toolTip">
+	 <string>Assign a cool name to your project</string>
+	</property>
+	<property name="toolTipDuration">
+	 <number>2</number>
+	</property>
+	<property name="clearButtonEnabled">
+	 <bool>true</bool>
+	</property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="typeLabel">
+	<property name="text">
+	 <string>Type</string>
+	</property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QListWidget" name="typeList"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="directoryLabel">
+	<property name="text">
+	 <string>Directory</string>
+	</property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="directoryPushButton">
+	<property name="text">
+	 <string>...</string>
+	</property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="page2">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Type specifics</string>
+   </property>
+   <property name="subTitle">
+    <string>Per item type configuration page</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QFormLayout" name="formLayout_3"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="page3">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Final touches</string>
+   </property>
+   <property name="subTitle">
+    <string>Adjust final settings to your likings</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">1</string>
+   </attribute>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="nameLabel_2">
+	<property name="text">
+	 <string>name</string>
+	</property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="nameLineEdit_2"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="directoryLabel_2">
+	<property name="text">
+	 <string>directory</string>
+	</property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="directoryPushButton_2">
+	<property name="text">
+	 <string>...</string>
+	</property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
+ <resources/>
+ <connections/>
 </ui>

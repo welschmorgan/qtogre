@@ -1,24 +1,26 @@
-#include "include/projectitemconfig.h"
+#include "include/project/projectitemconfig.h"
+#include <QObject>
 
-IProjectItemConfig::IProjectItemConfig(Type t)
-    : mType(t)
+IProjectItemConfig::IProjectItemConfig(const QString &name, Type t)
+    : tag<IProjectItemConfig, QString>(name)
+    , mType(t)
 {
 }
 IProjectItemConfig::IProjectItemConfig(const IProjectItemConfig &other)
-    : tag<IProjectItemConfig, std::string>(other)
+    : tag<IProjectItemConfig, QString>(other)
     , mType(other.mType)
 {}
 
-const std::string IProjectItemConfig::ROOT_STR = "root";
-const std::string IProjectItemConfig::MATERIAL_STR = "material";
-const std::string IProjectItemConfig::MESH_STR = "mesh";
-const std::string IProjectItemConfig::PARTICLE_STR = "particle";
-const std::string IProjectItemConfig::LIGHT_STR = "light";
-const std::string IProjectItemConfig::BILLBOARD_STR = "billboard";
-const std::string IProjectItemConfig::STATIC_GEOMETRY_STR = "static geometry";
-const std::string IProjectItemConfig::NODE_STR = "node";
+const QString IProjectItemConfig::ROOT_STR = QObject::tr("Root");
+const QString IProjectItemConfig::MATERIAL_STR = QObject::tr("Material");
+const QString IProjectItemConfig::MESH_STR = QObject::tr("Mesh");
+const QString IProjectItemConfig::PARTICLE_STR = QObject::tr("Particle");
+const QString IProjectItemConfig::LIGHT_STR = QObject::tr("Light");
+const QString IProjectItemConfig::BILLBOARD_STR = QObject::tr("Billboard");
+const QString IProjectItemConfig::STATIC_GEOMETRY_STR = QObject::tr("Static Geometry");
+const QString IProjectItemConfig::NODE_STR = QObject::tr("Node");
 
-std::string              IProjectItemConfig::toString(IProjectItemConfig::Type type)
+QString IProjectItemConfig::toString(IProjectItemConfig::Type type)
 {
     switch (type)
     {
@@ -42,7 +44,7 @@ std::string              IProjectItemConfig::toString(IProjectItemConfig::Type t
     }
 }
 
-IProjectItemConfig::Type    IProjectItemConfig::toType(const std::string &name)
+IProjectItemConfig::Type    IProjectItemConfig::toType(const QString &name)
 {
     if (name == IProjectItemConfig::ROOT_STR)
         return (IProjectItemConfig::ROOT);

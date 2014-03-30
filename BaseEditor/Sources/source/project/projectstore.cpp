@@ -1,7 +1,7 @@
-#include "include/projectstore.h"
-#include "include/projectwidget.h"
-#include "include/projectitem.h"
-#include "include/projectitemconfig.h"
+#include "include/project/projectstore.h"
+#include "include/project/projectwidget.h"
+#include "include/project/projectitem.h"
+#include "include/project/projectitemconfig.h"
 
 ProjectStore::ProjectStore(ProjectWidget *parent)
     : QObject(parent)
@@ -16,11 +16,11 @@ ProjectStore::~ProjectStore()
     clear();
 }
 
-ProjectItem     *ProjectStore::createRoot(const std::string &name)
+ProjectItem     *ProjectStore::createRoot(const QString &name)
 {
     if (rootItem)
         return (rootItem);
-    rootItem = new ProjectItem(new ProjectItemConfig::Root , name, nullptr, mTree);
+    rootItem = new ProjectItem(new ProjectItemConfig::Root(name) , name, nullptr, mTree);
     mTree->addTopLevelItem(rootItem);
     return (rootItem);
 }
@@ -31,12 +31,12 @@ const ProjectItem     *ProjectStore::getRoot() const { return (rootItem); }
 void             ProjectStore::destroyRoot()
 { if (rootItem) delete rootItem, rootItem = nullptr; }
 
-ProjectItem     *ProjectStore::createItem(IProjectItemConfig *type, const std::string &name)
+ProjectItem     *ProjectStore::createItem(IProjectItemConfig *type, const QString &name)
 {
     if (!rootItem)
         return (rootItem);
     ProjectItem *item = rootItem->createItem(type, name);
-    _modified = true;
+    _setModified(true);
     return (item);
 }
 ProjectItem     *ProjectStore::getRootItem()
@@ -58,4 +58,6 @@ bool            ProjectStore::isModified() const
 void            ProjectStore::_setModified(bool state)
 {
     _modified = state;
+    if (rootItem)
+        rootItem->setText(0, mTree->getName() + (state ? " *" : ""));
 }

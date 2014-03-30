@@ -1,9 +1,9 @@
-#include "include/projectitem.h"
-#include "include/projectstore.h"
-#include "include/projectwidget.h"
+#include "include/project/projectitem.h"
+#include "include/project/projectstore.h"
+#include "include/project/projectwidget.h"
 
 ProjectItem::ProjectItem(IProjectItemConfig *config,
-                         const std::string &name,
+                         const QString &name,
                          ProjectItem *parent,
                          ProjectWidget * tree)
     : QTreeWidgetItem(tree, QStringList())
@@ -11,8 +11,8 @@ ProjectItem::ProjectItem(IProjectItemConfig *config,
     , mConfig(config)
 {
     config->setTag(name);
-    setText(0, QString::fromStdString(name));
-    setText(1, QString::fromStdString(config->str()));
+    setText(0, name);
+    setText(1, config->str());
     parentItem = parent;
 }
 
@@ -20,7 +20,7 @@ ProjectItem::~ProjectItem()
 {
 }
 
-ProjectItem                 *ProjectItem::createItem(IProjectItemConfig *config, const std::string &name)
+ProjectItem                 *ProjectItem::createItem(IProjectItemConfig *config, const QString &name)
 {
     auto item = new ProjectItem(config, name, this, mTree);
     this->addChild(item);

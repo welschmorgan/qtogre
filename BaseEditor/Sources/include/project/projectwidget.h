@@ -2,27 +2,33 @@
 # define PROJECTWIDGET_H
 
 # include <QTreeWidget>
-# include "projectstore.h"
+# include "include/project/projectstore.h"
+# include "include/enablers.hpp"
 
 # define PROJECT_BASE_PATH "./projects/"
 # define PROJECT_FILTERS "All Project Files (*.proj);;All Files (*.*);;"
 
 class Application;
-class ProjectWidget : public QTreeWidget
+class ProjectWidget
+        : public QTreeWidget
+        , public enable::tag<ProjectWidget, QString>
 {
     Q_OBJECT
 public:
     explicit ProjectWidget(QWidget *parent = 0);
     ~ProjectWidget();
 
-    bool        createProject(const std::string &name = std::string());
+    bool        createProject(const QString &name = QString());
     bool        openProject();
     bool        saveProject();
     bool        saveProjectAs();
     bool        closeProject();
 
-    const std::string       &getName();
-    const std::string       &getPath();
+    const QString           &getName() const;
+    void                    setName(const QString &name);
+
+    void                    setPath(const QString &path);
+    const QString           &getPath() const;
 
     ProjectStore            *getStore();
     const ProjectStore      *getStore() const;
@@ -32,14 +38,14 @@ public:
     void                    enableToolbox();
 
 protected:
-    std::string     mName;
-    std::string     mPath;
+    QString         mName;
+    QString         mPath;
     Application     *mApp;
     ProjectStore    *mStore;
     bool            mCreated;
 
-    bool        _save(const std::string &path);
-    bool        _load(const std::string &path);
+    bool        _save(const QString &path);
+    bool        _load(const QString &path);
     void        createWidget(Application * app);
     void        destroyWidget();
 

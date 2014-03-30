@@ -3,7 +3,7 @@
 
 #include <QTreeWidgetItem>
 #include <QVariant>
-# include "projectitemconfig.h"
+# include "include/project/projectitemconfig.h"
 # include <memory>
 
 class ProjectWidget;
@@ -15,7 +15,7 @@ class ProjectItem : public QTreeWidgetItem
 {
 public:
     ProjectItem(IProjectItemConfig *config,
-                const std::string &name,
+                const QString &name = QString(),
                 ProjectItem *parent = nullptr,
                 ProjectWidget *tree = nullptr);
     ~ProjectItem();
@@ -24,7 +24,7 @@ public:
     IProjectItemConfig::Type    getType() const {return (mConfig->type());}
     IProjectItemConfig          *getConfig(){return (mConfig.get()); }
     ProjectItem                 *createItem(IProjectItemConfig *config,
-                                            const std::string &name);
+                                            const QString &name);
 
 private:
     QVariant                mValue;
